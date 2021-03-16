@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schema.csn.se/Studeranderapport" xmlns:tns="http://schema.csn.se/Studeranderapport" elementFormDefault="qualified">
+
+ 	<element name="studeranderapport" type="tns:StuderanderapportTyp"> </element> 	
+ 	
+ 	<!-- Studentrapport -->
+ 	<!-- Innehåller studeranderapport för en skola -->
+ 	<!-- Svenska tecken har undivikts för att slippa problem med encoding -->
+ 	<complexType name="StuderanderapportTyp">
+    	<sequence>
+    		<element name="skola" type="tns:SkolaTyp" minOccurs="1" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>   
+    
+    <!-- Skola -->
+ 	<!-- Innehåller en skola med en eller flera studerande -->
+    <complexType name="SkolaTyp">
+    	<sequence>
+    		<!-- Skolans unika id, 1000 - 99999 -->
+    		<element name="skolId" type="tns:SkolIdTyp" minOccurs="1" maxOccurs="1"></element>   
+    		<element name="studerande" type="tns:StuderandeTyp" minOccurs="1" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+    <!-- studerande -->
+ 	<!-- Innehåller en studerande med en eller flera studieperioder -->
+    <complexType name="StuderandeTyp">
+    	<sequence>
+    		<!-- studerandeens personnummer, ÅÅÅÅMMDDXXXX -->
+    		<element name="personnummer" type="tns:PersonnummerTyp" minOccurs="1" maxOccurs="1"></element>
+    		<element name="studieperiod" type="tns:StudieperiodTyp" minOccurs="1" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+    
+    <!-- Studieperiod --> 
+    <!-- Innehåller en studieperiod med alla uppgifter -->	
+    <complexType name="StudieperiodTyp">
+    	<sequence>    		    		
+    		<!-- Studieperiodens startdatum, ÅÅÅÅ-MM-DD -->
+    		<element name="fromDatum" type="tns:DatumTyp" minOccurs="1" maxOccurs="1"></element>   		
+
+    		<!-- Studieperiodens slutdatum, ÅÅÅÅ-MM-DD -->
+    		<element name="tomDatum" type="tns:DatumTyp" minOccurs="1" maxOccurs="1"></element>
+    		
+    		<!-- Omfattning -->
+    		<element name="omfattning" type="tns:OmfattningTyp" minOccurs="1" maxOccurs="1"></element>
+    		
+    		<!-- Resultat -->
+    		<element name="resultat" type="tns:ResultatTyp" minOccurs="0" maxOccurs="1"></element>    		
+    		
+    		<!-- Datum för ovanstående resultat, ÅÅÅÅ-MM-DD -->    		    		
+    		<element name="resultatDatum" type="tns:DatumTyp" minOccurs="0" maxOccurs="1"></element>
+    		
+    		<!-- Datum för ändring, t.ex. ändring av omfattning, ÅÅÅÅ-MM-DD -->    
+    		<element name="andringsDatum" type="tns:DatumTyp" minOccurs="0" maxOccurs="1"></element>
+    		
+    		<!-- Datum för studieavbrott, ÅÅÅÅ-MM-DD -->  
+    		<element name="avbrottsDatum" type="tns:DatumTyp" minOccurs="0" maxOccurs="1"></element>
+    		
+    		<!-- Är utbildningen en uppdragsutbildning -->
+    		<element name="uppdragsutbildning" type="tns:JaNejTyp" minOccurs="0" maxOccurs="1"></element>
+			
+			<!-- Normaltakt fram till avbrott för EG-skola och YH-skola -->
+    		<element name="resultatAvbrott" type="tns:JaNejTyp" minOccurs="0" maxOccurs="1"></element>
+    		
+    		<!-- Avdelning -->
+    		<element name="avdelning" type="tns:AvdelningTyp" minOccurs="0" maxOccurs="1"></element>
+    		
+    		<!-- Nivå -->
+    		<element name="niva" type="tns:NivaTyp" minOccurs="0" maxOccurs="1"></element>    		
+    	</sequence>    </complexType>	
+    
+    <!-- Typ för skolId --> 
+    <simpleType name="SkolIdTyp">
+       <restriction base="int">
+          <minInclusive value="1000"/>
+          <maxInclusive value="99999"/>
+       </restriction>
+    </simpleType>
+    
+    <!-- Typ för personnummer, ÅÅÅÅMMDDXXXX --> 
+    <simpleType name="PersonnummerTyp">
+    	<restriction base="string">
+    		<pattern
+    			value="(19|20|21)[0-9][0-9][0-1][0-9][01236789][0-9]([0-9]){4}" />
+    	</restriction>
+    </simpleType>
+
+    <!-- Typ för datum, ÅÅÅÅ-MM-DD --> 
+ 	<simpleType name="DatumTyp">
+ 		<restriction base="date">
+ 			<minInclusive value="2011-01-01" /> 		</restriction>
+ 	</simpleType>
+
+ 	<!-- Typ för omfattning --> 
+    <simpleType name="OmfattningTyp">
+       <restriction base="float">  
+          <minInclusive value="0.0"/>
+          <maxInclusive value="400.0"/> 	           				    					
+   	   </restriction>
+    </simpleType>  
+    
+	<!-- Typ för resultat -->
+	<simpleType name="ResultatTyp">
+		<restriction base="string">
+			<pattern value=".*" />
+			<minLength value="1"></minLength>
+			<maxLength value="5"></maxLength>
+		</restriction>
+	</simpleType>
+
+	<!-- Typ för Ja/Nej, J/N --> 
+    <simpleType name="JaNejTyp">
+       <restriction base="string">
+   	      <pattern value="J|N"/>     				    					
+   	   </restriction>
+    </simpleType>
+
+ 	<!-- Typ för avdelning --> 
+    <simpleType name="AvdelningTyp">
+       <restriction base="string">
+   	      <pattern value="B1|B2|A1|A2|A3"/>     				    					
+   	   </restriction>
+    </simpleType>
+    
+	<!-- Typ för nivå --> 
+    <simpleType name="NivaTyp">
+       <restriction base="string">
+   	      <pattern value="EG|FO|GR|GY|HO"/>     				    					
+   	   </restriction>
+    </simpleType>    
+</schema>
